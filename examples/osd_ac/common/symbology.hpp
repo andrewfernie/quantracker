@@ -9,6 +9,9 @@ quan::uav::osd::pxp_type get_osd_home_position();
 bool osd_show_compass();
 quan::uav::osd::pxp_type get_osd_compass_position();
 
+bool osd_show_heading();
+quan::uav::osd::pxp_type get_osd_heading_position();
+
 bool osd_show_gps_no_fix();
 quan::uav::osd::pxp_type get_osd_gps_no_fix_position();
 

@@ -95,7 +95,7 @@ fonts.o
 common_objects = on_draw.o draw_altitude.o draw_artificial_horizon.o \
 draw_compass.o draw_home.o draw_gps_state.o draw_batteries.o \
 symbology.o flash.o aircraft.o draw_lat_lon.o draw_mode.o \
-draw_speed.o osd_control.o graphics_api_extras.o
+draw_speed.o draw_heading.o osd_control.o graphics_api_extras.o
 
 ifeq ($(OPTIMISATION_LEVEL), )
 OPTIMISATION_LEVEL = O

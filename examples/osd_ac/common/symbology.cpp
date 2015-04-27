@@ -10,10 +10,13 @@ namespace {
    // will be overwritten if customised in flash
    bool want_home = true;
    uint8_t osd_home_page_control = 0x07;
-   quan::uav::osd::pal_ntsc_pos osd_home_position = {-160,70,60};
+   quan::uav::osd::pal_ntsc_pos osd_home_position = {-36,70,90};
    bool want_compass = true;
-   uint8_t osd_compass_page_control = 0x03;
+   uint8_t osd_compass_page_control = 0x00;
    quan::uav::osd::pal_ntsc_pos osd_compass_position = {0,-115,-80};
+   bool want_heading = true;
+   uint8_t osd_heading_page_control = 0x07;
+   quan::uav::osd::pal_ntsc_pos osd_heading_position = {-24,-115,-95};
    bool want_gps_no_fix = true;
    uint8_t osd_gps_no_fix_page_control = 0x03;
    quan::uav::osd::pal_ntsc_pos osd_gps_no_fix_position = {-160,70,50};
@@ -31,9 +34,9 @@ namespace {
    quan::uav::osd::pal_ntsc_pos osd_gps_fix_type_position = {-170,75,75};
    bool want_gps_num_sats = true;
    uint8_t osd_gps_num_sats_page_control = 0x03;
-   quan::uav::osd::pal_ntsc_pos osd_gps_num_sats_position = {-80,75,75};
+   quan::uav::osd::pal_ntsc_pos osd_gps_num_sats_position = {-122,75,75};
    bool want_gps_hdop = true;
-   uint8_t osd_gps_hdop_page_control = 0x03;
+   uint8_t osd_gps_hdop_page_control = 0x00;
    quan::uav::osd::pal_ntsc_pos osd_gps_hdop_position = {-60,75,75};
    bool want_flight_mode = true;
    uint8_t osd_flight_mode_page_control = 0x07;
@@ -42,7 +45,7 @@ namespace {
    uint8_t osd_armed_mode_page_control = 0x07;
    quan::uav::osd::pal_ntsc_pos osd_armed_mode_position = {-170,90,90};
    bool want_airspeed = true;
-   uint8_t osd_airspeed_page_control = 0x07;
+   uint8_t osd_airspeed_page_control = 0x00;
    quan::uav::osd::pal_ntsc_pos osd_airspeed_position = {-170,0,0};
    bool want_groundspeed = true;
    uint8_t osd_groundspeed_page_control = 0x03;
@@ -68,6 +71,8 @@ namespace {
 
 uint8_t osd_show_altitude_page() { return osd_altitude_page_control;}
 bool osd_show_altitude() { return want_altitude&&((osd_show_altitude_page()&get_osd_mode())!=0);}
+uint8_t osd_show_heading_page() { return osd_heading_page_control;}
+bool osd_show_heading() { return want_heading&&((osd_show_heading_page()&get_osd_mode())!=0);}
 uint8_t osd_show_home_page() { return osd_home_page_control;}
 bool osd_show_home() { return want_home&&((osd_show_home_page()&get_osd_mode())!=0);}
 uint8_t osd_show_compass_page() { return osd_compass_page_control;}
@@ -152,6 +157,11 @@ quan::uav::osd::pxp_type get_osd_longitude_position()
 quan::uav::osd::pxp_type get_osd_altitude_position()
 {
    return  osd_altitude_position;
+}
+
+quan::uav::osd::pxp_type get_osd_heading_position()
+{
+   return  osd_heading_position;
 }
 
 quan::uav::osd::pxp_type get_osd_baro_altitude_position()
@@ -261,6 +271,28 @@ bool init_values_from_flash()
       uint8_t v;
       if ( quan::stm32::flash::get_flash_value("osd_altitude_control",v)){
     	  osd_altitude_page_control=v;
+      }
+  }
+
+
+   if ( symtab.is_symbol_name_defined_in_flash("show_heading")){
+      bool v = false;
+      if ( quan::stm32::flash::get_flash_value("show_heading",v)){
+         want_heading = v;
+      }
+   }
+
+   if ( symtab.is_symbol_name_defined_in_flash("osd_heading_pos")){
+      quan::three_d::vect<int32_t> v;
+      if ( quan::stm32::flash::get_flash_value("osd_heading_pos",v)){
+         osd_heading_position.set_xpos(v.x);
+         osd_heading_position.set_ypos(v.y,v.z);
+      }
+   }
+   if ( symtab.is_symbol_name_defined_in_flash("osd_heading_control")){
+      uint8_t v;
+      if ( quan::stm32::flash::get_flash_value("osd_heading_control",v)){
+    	  osd_heading_page_control=v;
       }
   }
 

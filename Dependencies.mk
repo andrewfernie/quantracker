@@ -9,37 +9,37 @@
 ### The arm-gcc compiler
 # Download from : https://launchpad.net/gcc-arm-embedded
 
- TOOLCHAIN_PREFIX =/opt/gcc-arm-none-eabi-4_7-2013q2/
+TOOLCHAIN_PREFIX =/opt/gcc-arm-none-eabi-4_8-2013q4/
 
 # To find the version of arm-gcc run ./gcc --version 
 # from within $(TOOLCHAIN_PREFIX)arm-none-eabi/bin directory
 
- TOOLCHAIN_GCC_VERSION = 4.7.4
+ TOOLCHAIN_GCC_VERSION = 4.8.3
 
 ######################################################################
 ###  the quan library                                          
 ## Download from : https://github.com/kwikius/quan-trunk 
 
-QUAN_INCLUDE_PATH = /home/andy/website/quan-trunk
+QUAN_INCLUDE_PATH = /home/andrew/Documents/QuantrackerOSD/quan-trunk
 
 #######################################################################
 ### Mavlink
 ## Download from : https://github.com/mavlink/mavlink
 
 #MAVLINK_INCLUDE_PATH = /home/andy/website/fpv/mavlink
-MAVLINK_INCLUDE_PATH = /home/andy/cpp/lib
+MAVLINK_INCLUDE_PATH = /home/andrew/Documents/QuantrackerOSD/mavlink
 
 #######################################################################
 ###  FreeRTOS                                               
 ## Download from : http://www.freertos.org/a00104.html
 
- FREE_RTOS_DIR = /home/andy/cpp/lib/FreeRTOSV8.1.2/FreeRTOS/
+FREE_RTOS_DIR = /home/andrew/Documents/QuantrackerOSD/FreeRTOSV8.2.0/FreeRTOS/
 
 ################################################################
 ###  The STM32F4 standard peripherals library               
 ## Download from : http://www.st.com/st-web-ui/static/active/en/st_prod_software_internet/resource/technical/software/firmware/stm32f4_dsp_stdperiph_lib.zip
 
- STM32_STD_PERIPH_LIB_DIR = /opt/stm32f4/STM32F4xx_DSP_StdPeriph_Lib_V1.0.0/Libraries/
+ STM32_STD_PERIPH_LIB_DIR = /opt/stm32f4/STM32F4xx_DSP_StdPeriph_Lib_V1.4.0/Libraries/
 
 #########################USER CUSTOMISATION#########################################
 ### Your Customised on_draw function

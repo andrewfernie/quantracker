@@ -15,12 +15,12 @@ using namespace quan::uav::osd;
 namespace {
 
   const char * const fix_type_strings[] = {
-       "no gps"
-      ,"no fix" 
-      ,"2D fix"
-      ,"3D fix"
-      ,"3D fix (dgps)"
-      ,"3D fix (rtk)"
+       "xx"
+      ,"0d"
+      ,"2d"
+      ,"3d"
+      ,"3d"
+      ,"3d"
   };       
 }
 
@@ -38,8 +38,8 @@ void draw_gps_state()
 	   if (font)
 	   {
 		  uint8_t const fix_type = read_gps_fix_type();
-		  if ( fix_type < 5){
-			 sprintf(buf,"%s", fix_type_strings[fix_type]);
+          if ( fix_type < 6){
+			 sprintf(buf,"%c%s", 15, fix_type_strings[fix_type]);
 			 draw_text(buf,pos,font);
 		  }
 	   }
@@ -47,32 +47,40 @@ void draw_gps_state()
 
    if ( osd_show_gps_num_sats() == true)
    {
-	   pos = get_osd_gps_num_sats_position();
-	   if (font)
-	   {
-		 sprintf(buf,"%d", static_cast<int>(read_gps_num_sats()));
-		 draw_text(buf,pos,font);
-	   }
+	   uint8_t const fix_type = read_gps_fix_type();
+       if ( fix_type > 0 && fix_type < 6)
+       {
+		   pos = get_osd_gps_num_sats_position();
+		   if (font)
+		   {
+			 sprintf(buf,"%d", static_cast<int>(read_gps_num_sats()));
+			 draw_text(buf,pos,font);
+		   }
+       }
    }
 
    if ( osd_show_gps_hdop() == true)
    {
-	   pos = get_osd_gps_hdop_position();
+	   uint8_t const fix_type = read_gps_fix_type();
+       if ( fix_type > 0 && fix_type < 6)
+       {
+		   pos = get_osd_gps_hdop_position();
 
-	   if (font)
-	   {
-		  quan::length_<uint16_t>::cm cur_hdop;
-		  uint16_t display_hdop;
+		   if (font)
+		   {
+			  quan::length_<uint16_t>::cm cur_hdop;
+			  uint16_t display_hdop;
 
-		  display_hdop = cur_hdop.numeric_value();
+			  display_hdop = cur_hdop.numeric_value();
 
-		  quan::constrain<uint16_t> (
-				  display_hdop
-				, 0
-				, 999);
+			  quan::constrain<uint16_t> (
+					  display_hdop
+					, 0
+					, 999);
 
-		  sprintf(buf,"%3d", display_hdop);
-		  draw_text(buf,pos,font);
-	   }
+			  sprintf(buf,"%3d", display_hdop);
+			  draw_text(buf,pos,font);
+		   }
+       }
    }
 }

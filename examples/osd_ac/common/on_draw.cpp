@@ -11,40 +11,33 @@ void draw_gps_state();
 void draw_mode();
 
 namespace {
-  int count = 0;
+int count = 0;
 }
 
 /*
-TODO add Va (airspeed) Vg( groundspeed)
-*/
+ TODO add Va (airspeed) Vg( groundspeed)
+ */
 
-void quan::uav::osd::on_draw()
-{
+void quan::uav::osd::on_draw() {
 
-   draw_compass();
+	draw_compass();
+	draw_artificial_horizon();
+	draw_batteries();
+	draw_mode();
+	draw_altitude();
+	draw_speed();
+	draw_lat_lon();
+	draw_heading();
+	draw_gps_state();
 
-   draw_artificial_horizon();
-   draw_batteries();
-   draw_mode();
-   draw_altitude();
-   draw_speed();
-   draw_lat_lon();
-
-
-   if (home_position_is_set() == true){
-      draw_home();
-   } else{ // home position
-      if ( position_is_good()){
-         if ( ++count == 250){ // 5 secs
-            auto const ap = get_aircraft_position();
-            set_home_position(ap);
-         }
-      }else{
-         draw_gps_state();
-      }
-   }
-
-
-
-
+	if (home_position_is_set() == true) {
+		draw_home();
+	} else { // home position
+		if (position_is_good()) {
+			if (++count == 250) { // 5 secs
+				auto const ap = get_aircraft_position();
+				set_home_position(ap);
+			}
+		}
+	}
 }
