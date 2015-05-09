@@ -20,13 +20,13 @@ DLL_NAME = osd_draw.so
 
 ######################## #######################################
 # mod these to your compiler must be a C++11 gcc compiler
-CC = /opt/gcc-4.7.2/bin/g++
-LD = /opt/gcc-4.7.2/bin/g++
+CC = /usr/bin/g++
+LD = /usr/bin/g++
 # Modify this to your quan include path
-QUAN_INCLUDE_PATH = /home/andy/website/quan-trunk/
+QUAN_INCLUDE_PATH = /home/andrew/Documents/QuantrackerOSD/quan-trunk/
 
 # try comment this ...
-C_INCLUDE_PATH = /usr/include/i386-linux-gnu
+C_INCLUDE_PATH = /usr/include/x86_64-linux-gnu
 
 # and uncomment this if you get compile errors
 # On my Ubuntu system the C++ headers and default compiler are not c++11

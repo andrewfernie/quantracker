@@ -45,6 +45,9 @@ quan::uav::osd::pxp_type get_osd_longitude_position();
 bool osd_show_altitude();
 quan::uav::osd::pxp_type get_osd_altitude_position();
 
+bool osd_show_altitude_bar();
+quan::uav::osd::pxp_type get_osd_altitude_bar_position();
+
 bool osd_show_baro_altitude();
 quan::uav::osd::pxp_type get_osd_baro_altitude_position();
 

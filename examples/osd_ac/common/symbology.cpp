@@ -21,11 +21,14 @@ namespace {
    uint8_t osd_gps_no_fix_page_control = 0x03;
    quan::uav::osd::pal_ntsc_pos osd_gps_no_fix_position = {-160,70,50};
    bool want_altitude = true;
-   uint8_t osd_altitude_page_control = 0x03;
-   quan::uav::osd::pal_ntsc_pos osd_altitude_position = {95, -15, -15};
+   uint8_t osd_altitude_page_control = 0x00;
+   quan::uav::osd::pal_ntsc_pos osd_altitude_position = {95, 0, 0};
+   bool want_altitude_bar = true;
+   uint8_t osd_altitude_bar_page_control = 0x03;
+   quan::uav::osd::pal_ntsc_pos osd_altitude_bar_position = {80, -15, -15};
    bool want_baro_altitude = true;
    uint8_t osd_baro_altitude_page_control = 0x07;
-   quan::uav::osd::pal_ntsc_pos osd_baro_altitude_position = {95, 0, 0};
+   quan::uav::osd::pal_ntsc_pos osd_baro_altitude_position = {95, -15, -15};
    bool want_afcl_horizon = true;
    uint8_t osd_afcl_horizon_page_control = 0x03;
    quan::uav::osd::angle_type  osd_afcl_horiz_pitch_adj{0}; 
@@ -71,6 +74,8 @@ namespace {
 
 uint8_t osd_show_altitude_page() { return osd_altitude_page_control;}
 bool osd_show_altitude() { return want_altitude&&((osd_show_altitude_page()&get_osd_mode())!=0);}
+uint8_t osd_show_altitude_bar_page() { return osd_altitude_bar_page_control;}
+bool osd_show_altitude_bar() { return want_altitude_bar&&((osd_show_altitude_bar_page()&get_osd_mode())!=0);}
 uint8_t osd_show_heading_page() { return osd_heading_page_control;}
 bool osd_show_heading() { return want_heading&&((osd_show_heading_page()&get_osd_mode())!=0);}
 uint8_t osd_show_home_page() { return osd_home_page_control;}
@@ -157,6 +162,11 @@ quan::uav::osd::pxp_type get_osd_longitude_position()
 quan::uav::osd::pxp_type get_osd_altitude_position()
 {
    return  osd_altitude_position;
+}
+
+quan::uav::osd::pxp_type get_osd_altitude_bar_position()
+{
+   return  osd_altitude_bar_position;
 }
 
 quan::uav::osd::pxp_type get_osd_heading_position()
@@ -274,6 +284,26 @@ bool init_values_from_flash()
       }
   }
 
+   if ( symtab.is_symbol_name_defined_in_flash("show_altitude_bar")){
+      bool v = false;
+      if ( quan::stm32::flash::get_flash_value("show_altitude_bar",v)){
+         want_altitude_bar = v;
+      }
+   }
+
+   if ( symtab.is_symbol_name_defined_in_flash("osd_altitude_bar_pos")){
+      quan::three_d::vect<int32_t> v;
+      if ( quan::stm32::flash::get_flash_value("osd_altitude_bar_pos",v)){
+         osd_altitude_bar_position.set_xpos(v.x);
+         osd_altitude_bar_position.set_ypos(v.y,v.z);
+      }
+   }
+   if ( symtab.is_symbol_name_defined_in_flash("osd_altitude_bar_control")){
+      uint8_t v;
+      if ( quan::stm32::flash::get_flash_value("osd_altitude_bar_control",v)){
+    	  osd_altitude_bar_page_control=v;
+      }
+  }
 
    if ( symtab.is_symbol_name_defined_in_flash("show_heading")){
       bool v = false;
