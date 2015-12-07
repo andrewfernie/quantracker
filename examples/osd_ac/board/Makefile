@@ -51,7 +51,7 @@ obj_board_objects = $(patsubst %,$(OBJDIR)%,$(board_objects))
 common_objects = on_draw.o draw_altitude.o draw_artificial_horizon.o \
 draw_compass.o draw_home.o draw_gps_state.o draw_batteries.o \
 symbology.o flash.o aircraft.o draw_lat_lon.o draw_mode.o \
-draw_speed.o osd_control.o graphics_api_extras.o
+draw_speed.o osd_control.o graphics_api_extras.o draw_heading.o
 
 obj_common_objects = $(patsubst %,$(OBJDIR)%,$(common_objects))
 
@@ -88,7 +88,7 @@ upload : test
 
 # try add -b115200 to increase upload rate
 upload_sp : test
-	$(STM32FLASH) -f -v -w $(BINDIR)main.bin /dev/ttyUSB0
+	$(STM32FLASH) -b115200 -f -v -w $(BINDIR)main.bin /dev/ttyUSB0
 #----------------------------------------
 
 clean:

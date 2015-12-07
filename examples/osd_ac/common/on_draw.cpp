@@ -29,6 +29,7 @@ void quan::uav::osd::on_draw()
    draw_altitude();
    draw_speed();
    draw_lat_lon();
+   draw_heading();
 
 
    if (home_position_is_set() == true){

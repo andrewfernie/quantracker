@@ -42,8 +42,16 @@ quan::uav::osd::pxp_type get_osd_longitude_position();
 bool osd_show_altitude();
 quan::uav::osd::pxp_type get_osd_altitude_position();
 
+bool osd_show_altitude_bar();
+quan::uav::osd::pxp_type get_osd_altitude_bar_position();
+
+float osd_get_altitude_bar_scale();
+
 bool osd_show_baro_altitude();
 quan::uav::osd::pxp_type get_osd_baro_altitude_position();
+
+bool osd_show_heading();
+quan::uav::osd::pxp_type get_osd_heading_position();
 
 bool osd_show_aircraft_battery_voltage();
 quan::uav::osd::pxp_type get_osd_aircraft_battery_voltage_position();

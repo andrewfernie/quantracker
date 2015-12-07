@@ -75,5 +75,24 @@ void draw_altitude()
 	   }
 	}
 
+	if ( osd_show_altitude_bar() == true) {
+		pos = get_osd_altitude_bar_position();
+
+		alt = get_baro_alt();
+		float baro_alt = alt.numeric_value();
+
+		float scale = osd_get_altitude_bar_scale();
+		if(scale <= 0.0) scale = 1.0;
+
+		if(baro_alt <= 0.0f)
+		   draw_box(pos, pos + pxp_type{BARO_ALT_BAR_WIDTH, BARO_ALT_BAR_HEIGHT},colour_type::white, false);
+		else if(baro_alt <= scale) {
+	       draw_box(pos, pos + pxp_type{BARO_ALT_BAR_WIDTH, BARO_ALT_BAR_HEIGHT},colour_type::white, false);
+
+		   int32_t bar_height = (int32_t)(baro_alt / scale * BARO_ALT_BAR_HEIGHT);
+		   draw_box(pos, pos + pxp_type{BARO_ALT_BAR_WIDTH, bar_height},colour_type::white, true);
+		}
+	 }
+
 }
 

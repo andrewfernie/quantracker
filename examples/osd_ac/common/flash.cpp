@@ -53,9 +53,16 @@ namespace {
       typedef bool                           show_compass;
       typedef uint8_t                        osd_compass_control;
       typedef quan::three_d::vect<int32_t>   osd_compass_pos;
+      typedef bool                           show_heading;
+      typedef uint8_t                       osd_heading_control;
+      typedef quan::three_d::vect<int32_t>  osd_heading_pos;
       typedef bool                           show_altitude;
       typedef uint8_t                        osd_altitude_control;
       typedef quan::three_d::vect<int32_t>   osd_altitude_pos;
+      typedef bool                           show_altitude_bar;
+      typedef uint8_t                        osd_altitude_bar_control;
+      typedef quan::three_d::vect<int32_t>   osd_altitude_bar_pos;
+      typedef float                          osd_altitude_bar_scale;
       typedef bool                           show_gps_no_fix;
       typedef uint8_t                        osd_gps_no_fix_control;
       typedef quan::three_d::vect<int32_t>   osd_gps_no_fix_pos;
@@ -206,6 +213,21 @@ namespace {
 
    }
 
+   bool altitude_bar_scale_check(void * p)
+    {
+       if ( p == nullptr){
+          return false;
+       }
+       flash_variable_type::osd_altitude_bar_scale * pv = (flash_variable_type::osd_altitude_bar_scale*) p;
+       if ( *pv >= 0) {
+          return true;
+       }else{
+          quan::user_error("scale must be greater than 0.0 ");
+          return false;
+       }
+
+    }
+
 //####### The flash_variables symtable itself ###########################
  
    quan::stm32::flash::symtab_entry_t constexpr flash_variables_symtab[] = {
@@ -224,9 +246,16 @@ namespace {
       ,EE_SYMTAB_ENTRY(show_compass, nop_check,"true/false to show compass",false)
       ,EE_SYMTAB_ENTRY(osd_compass_control,display_control_check,"Four low order bits = enable display on four pages. Range: 0 to 15",false)
       ,EE_SYMTAB_ENTRY(osd_compass_pos,display_pos_check,"[int x, int y_pal, int y_ntsc] range: -499 to 499",false)
+      ,EE_SYMTAB_ENTRY(show_heading, nop_check,"true/false to show heading",false)
+      ,EE_SYMTAB_ENTRY(osd_heading_control,display_control_check,"Four low order bits = enable display on four pages. Range: 0 to 15",false)
+      ,EE_SYMTAB_ENTRY(osd_heading_pos,display_pos_check,"[int x, int y_pal, int y_ntsc] range: -499 to 499",false)
       ,EE_SYMTAB_ENTRY(show_altitude, nop_check,"true/false to show home alt",false)
       ,EE_SYMTAB_ENTRY(osd_altitude_control,display_control_check,"Four low order bits = enable display on four pages. Range: 0 to 15",false)
       ,EE_SYMTAB_ENTRY(osd_altitude_pos,display_pos_check,"[int x, int y_pal, int y_ntsc] range: -499 to 499",false)
+      ,EE_SYMTAB_ENTRY(show_altitude_bar, nop_check,"true/false to show alt bar",false)
+      ,EE_SYMTAB_ENTRY(osd_altitude_bar_control,display_control_check,"Four low order bits = enable display on four pages. Range: 0 to 15",false)
+      ,EE_SYMTAB_ENTRY(osd_altitude_bar_pos,display_pos_check,"[int x, int y_pal, int y_ntsc] range: -499 to 499",false)
+      ,EE_SYMTAB_ENTRY(osd_altitude_bar_scale,altitude_bar_scale_check,"altitude bar maximum value: range: greater than 0",false)
       ,EE_SYMTAB_ENTRY(show_gps_no_fix, nop_check,"true/false to show no fix gps pos",false)
       ,EE_SYMTAB_ENTRY(osd_gps_no_fix_control,display_control_check,"Four low order bits = enable display on four pages. Range: 0 to 15",false)
       ,EE_SYMTAB_ENTRY(osd_gps_no_fix_pos,display_pos_check,"[int x, int y_pal, int y_ntsc] range: -499 to 499",false)
