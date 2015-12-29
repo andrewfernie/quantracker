@@ -101,3 +101,25 @@
    {
       return the_aircraft.battery_voltage;
    }
+
+   uint16_t quan::uav::osd::get_current_wp_index()
+   {
+         return the_aircraft.current_wp_index;
+   }
+
+   uint16_t quan::uav::osd::get_num_wp_loaded()
+   {
+         return the_aircraft.num_wp_loaded;
+   }
+
+   quan::length_<float>::m
+   quan::uav::osd::get_current_wp_dist()
+   {
+         return the_aircraft.current_wp_dist;
+   }
+
+   quan::angle_<float>::deg
+   quan::uav::osd::get_current_wp_bearing()
+   {
+         return the_aircraft.current_wp_bearing;
+   }

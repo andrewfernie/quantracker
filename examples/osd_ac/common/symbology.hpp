@@ -6,6 +6,9 @@
 bool osd_show_home();
 quan::uav::osd::pxp_type get_osd_home_position();
 
+bool osd_show_map();
+quan::uav::osd::pxp_type get_osd_map_position();
+
 bool osd_show_compass();
 quan::uav::osd::pxp_type get_osd_compass_position();
 
@@ -61,6 +64,9 @@ quan::uav::osd::pxp_type get_osd_aircraft_battery_current_position();
 
 bool osd_show_aircraft_battery_remaining();
 quan::uav::osd::pxp_type get_osd_aircraft_battery_remaining_position();
+
+bool osd_show_nav_wp();
+quan::uav::osd::pxp_type get_osd_nav_wp_position();
 
 bool osd_show_afcl_horizon();
 quan::uav::osd::angle_type osd_get_afcl_horizon_pitch_adj();

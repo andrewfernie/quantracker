@@ -30,6 +30,8 @@ void quan::uav::osd::on_draw()
    draw_speed();
    draw_lat_lon();
    draw_heading();
+   draw_nav();
+   draw_map();
 
 
    if (home_position_is_set() == true){
@@ -44,7 +46,6 @@ void quan::uav::osd::on_draw()
          draw_gps_state();
       }
    }
-
 
 
 

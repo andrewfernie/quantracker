@@ -15,8 +15,8 @@ using namespace quan::uav::osd;
 namespace {
 
   const char * const fix_type_strings[] = {
-	       "xx"
-	      ,"0d"
+	       "no gps"
+	      ,"no fix"
 	      ,"2d"
 	      ,"3d"
 	      ,"3d"
@@ -48,7 +48,7 @@ void draw_gps_state()
    if ( osd_show_gps_num_sats() == true)
    {
 	   uint8_t const fix_type = read_gps_fix_type();
-	   if ( fix_type > 0 && fix_type < 6)
+	   if ( fix_type >= 2 && fix_type < 6)
 	   {
 		   pos = get_osd_gps_num_sats_position();
 		   if (font)

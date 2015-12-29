@@ -101,6 +101,10 @@ namespace{
   void do_mavlink_vfr_hud(mavlink_message_t * pmsg);
   void do_mavlink_attitude(mavlink_message_t * pmsg);
   void do_mavlink_rc_channels_raw(mavlink_message_t * pmsg);
+  void do_mavlink_mission_count(mavlink_message_t * pmsg);
+  void do_mavlink_mission_current(mavlink_message_t * pmsg);
+  void do_mavlink_mission_item(mavlink_message_t * pmsg);
+  void do_mavlink_nav_controller_output(mavlink_message_t * pmsg);
 
    void read_mavlink(void * param)
    {
@@ -162,6 +166,19 @@ namespace{
                case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
             	  do_mavlink_rc_channels_raw(&msg);
                break;
+               case MAVLINK_MSG_ID_MISSION_COUNT:
+            	   do_mavlink_mission_count(&msg);
+               break;
+               case MAVLINK_MSG_ID_MISSION_CURRENT:
+            	   do_mavlink_mission_current(&msg);
+               break;
+               case MAVLINK_MSG_ID_MISSION_ITEM:
+            	   do_mavlink_mission_item(&msg);
+               break;
+               case MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
+                    do_mavlink_nav_controller_output(&msg);
+               break;
+
                default:
                break;
             }
@@ -340,6 +357,102 @@ namespace{
 
       the_aircraft.mutex_release();
    }
+
+   void do_mavlink_mission_count(mavlink_message_t * pmsg)
+   {
+	  mavlink_mission_count_t mission_count_data;
+
+	  the_aircraft.mutex_acquire();
+
+      mavlink_msg_mission_count_decode(pmsg, &mission_count_data);
+
+      the_aircraft.wp_receive_count = mission_count_data.count;
+
+      the_aircraft.num_wp_loaded = 0;
+
+         if (the_aircraft.wp_receive_count > MAX_WP) {
+        	 the_aircraft.wp_receive_count = MAX_WP;
+         }
+         the_aircraft.wp_receive_index = 0;							// start receiving WP 0
+
+         if (the_aircraft.wp_receive_count <= 0) {					// must be at least 1 (home)
+        	 the_aircraft.wp_receive_inprocess = false;
+         }
+
+
+      the_aircraft.mutex_release();
+   }
+
+   void do_mavlink_mission_current(mavlink_message_t * pmsg)
+   {
+	   mavlink_mission_current_t mission_current_data;
+
+	   the_aircraft.mutex_acquire();
+
+	   mavlink_msg_mission_current_decode(pmsg, &mission_current_data);
+
+	   the_aircraft.current_wp_index = mission_current_data.seq;
+
+         if (the_aircraft.current_wp_index <= the_aircraft.num_wp_loaded) {
+        	 the_aircraft.current_wp_set = true;
+         } else {
+        	 the_aircraft.current_wp_set = false;
+         }
+
+      the_aircraft.mutex_release();
+   }
+
+   void do_mavlink_mission_item(mavlink_message_t * pmsg)
+   {
+	  mavlink_mission_item_t tempWPData;
+
+	  the_aircraft.mutex_acquire();
+
+	  mavlink_msg_mission_item_decode(pmsg, &tempWPData);
+
+
+
+		  if (tempWPData.seq < MAX_WP) {
+			  the_aircraft.wp_list[tempWPData.seq].wp_type 	        = tempWPData.command;
+			  the_aircraft.wp_list[tempWPData.seq].location.lon 	= quan::angle_<float>::deg10e7{tempWPData.y};				// Lon * 10**7
+			  the_aircraft.wp_list[tempWPData.seq].location.lat 	= quan::angle_<float>::deg10e7{tempWPData.x};
+			  the_aircraft.wp_list[tempWPData.seq].location.alt 	= quan::length_<int32_t>::mm{tempWPData.z};
+		  }  // else  skip
+
+
+
+		  the_aircraft.wp_receive_index = tempWPData.seq + 1;
+		  if (the_aircraft.wp_receive_index >= the_aircraft.wp_receive_count) {
+			  the_aircraft.wp_receive_inprocess = false;
+			  the_aircraft.wp_receive_index = -1;
+		  };
+
+		  if (tempWPData.seq == 0) {
+			  the_aircraft.home_is_set = true;
+		  }
+
+		  if (tempWPData.seq > the_aircraft.num_wp_loaded) {
+			  the_aircraft.num_wp_loaded = tempWPData.seq;
+		  }
+
+      the_aircraft.mutex_release();
+   }
+
+   void do_mavlink_nav_controller_output(mavlink_message_t * pmsg)
+   {
+
+	   mavlink_nav_controller_output_t	nav_controller_output_data;
+
+  	   the_aircraft.mutex_acquire();
+
+	   mavlink_msg_nav_controller_output_decode(pmsg, &nav_controller_output_data);
+
+	   the_aircraft.current_wp_bearing = quan::angle_<int16_t>::deg{nav_controller_output_data.target_bearing};   // Bearing to current waypoint/target in degrees
+	   the_aircraft.current_wp_dist = quan::length_<uint16_t>::m{nav_controller_output_data.wp_dist};          // Distance to active waypoint in meters
+
+       the_aircraft.mutex_release();
+   }
+
 
    char dummy_param  =0;
    TaskHandle_t task_handle = NULL;

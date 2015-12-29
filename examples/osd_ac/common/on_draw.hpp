@@ -9,6 +9,8 @@
  void draw_speed();
  void draw_lat_lon();
  void draw_heading();
+ void draw_nav();
+ void draw_map();
 
 #endif
 // QUANTRACKER_AIR_OSD_ON_DRAW_HPP_INCLUDED

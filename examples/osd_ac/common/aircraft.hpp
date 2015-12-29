@@ -67,6 +67,14 @@ struct attitude_t{
 };
 */
 
+
+#define MAX_WP 20
+
+struct waypoint_type{
+	uint16_t                            wp_type;
+	quan::uav::osd::position_type       location;
+};
+
 struct aircraft{
   // location_t    
    quan::uav::osd::position_type       location;
@@ -86,7 +94,17 @@ struct aircraft{
    gps_t                               gps;
    uint16_t                            rc_raw_chan[8];
    uint16_t                            rc_raw_rssi;
-                                          
+   uint8_t                             home_is_set;
+   uint16_t                            num_wp_loaded;
+   uint8_t                             current_wp_set;
+   uint16_t                            current_wp_index;
+   uint8_t                             wp_receive_inprocess;
+   int		                           wp_receive_index;
+   int                                 wp_receive_count;
+   waypoint_type                       wp_list[MAX_WP];
+   quan::length_<float>::m             current_wp_dist;
+   quan::angle_<float>::deg            current_wp_bearing;
+
    aircraft():
       throttle{0},
       heading{0},
@@ -99,7 +117,14 @@ struct aircraft{
       custom_mode{0},
       base_mode{0},
       rc_raw_chan{0,0,0,0,0,0,0,0},
-      rc_raw_rssi{0}
+      rc_raw_rssi{0},
+      home_is_set{0},
+      num_wp_loaded{0},
+      current_wp_set{0},
+      current_wp_index{0},
+      wp_receive_inprocess{false},
+      wp_receive_index{-1},
+      wp_receive_count{0}
 #if !defined QUANTRACKER_AIR_OSD_PC_SIM_MODE
       ,m_mutex{0}
 #endif

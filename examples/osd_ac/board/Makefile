@@ -51,7 +51,8 @@ obj_board_objects = $(patsubst %,$(OBJDIR)%,$(board_objects))
 common_objects = on_draw.o draw_altitude.o draw_artificial_horizon.o \
 draw_compass.o draw_home.o draw_gps_state.o draw_batteries.o \
 symbology.o flash.o aircraft.o draw_lat_lon.o draw_mode.o \
-draw_speed.o osd_control.o graphics_api_extras.o draw_heading.o
+draw_speed.o osd_control.o graphics_api_extras.o draw_heading.o draw_nav.o \
+draw_map.o angle_limits.o
 
 obj_common_objects = $(patsubst %,$(OBJDIR)%,$(common_objects))
 

@@ -82,7 +82,7 @@ void draw_altitude()
 		float baro_alt = alt.numeric_value();
 
 		float scale = osd_get_altitude_bar_scale();
-		if(scale <= 0.0) scale = 1.0;
+		if(scale <= 0.0f) scale = 1.0f;
 
 		if(baro_alt <= 0.0f)
 		   draw_box(pos, pos + pxp_type{BARO_ALT_BAR_WIDTH, BARO_ALT_BAR_HEIGHT},colour_type::white, false);
