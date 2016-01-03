@@ -41,6 +41,22 @@
 
     }
 
+   uint8_t quan::uav::osd::get_arm_mode()
+    {
+       uint8_t armed;
+
+       uint8_t const mode = get_base_mode();
+
+       if ((mode & 0x80)!=0){
+          armed = true;
+       }
+       else {
+          armed = false;
+       }
+
+       return armed;
+     }
+
    uint8_t quan::uav::osd::get_custom_mode()
     {
        //atomic

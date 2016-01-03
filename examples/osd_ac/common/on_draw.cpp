@@ -12,6 +12,7 @@ void draw_mode();
 
 namespace {
   int count = 0;
+  uint8_t last_armed=false;
 }
 
 /*
@@ -33,6 +34,15 @@ void quan::uav::osd::on_draw()
    draw_nav();
    draw_map();
 
+   uint8_t const armed = get_arm_mode();
+
+   // force set home position on arm if option is set in flash
+   if(osd_get_init_home_on_arm() && position_is_good() && armed && !last_armed)
+   {
+       auto const ap = get_aircraft_position();
+       set_home_position(ap, true);
+   }
+   last_armed = armed;
 
    if (home_position_is_set() == true){
       draw_home();

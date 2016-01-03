@@ -45,19 +45,23 @@ font_ptr font = get_font(FontID::OSD_Charset);
 
 			 double dist = get_current_wp_dist().numeric_value();
 
-			 float bearing = get_current_wp_bearing().numeric_value();
-			 float bearing360 = limit_360(bearing);
+			 angle_type const wp_bearing = get_current_wp_bearing();
 
 		     angle_type const heading = get_aircraft_heading();
-		     float heading360 = limit_360((float)heading.numeric_value());
 
-		     bearing360 = limit_plus_minus_180(bearing360 - heading360);
+             pos.y = pos.y - (font_size.y);
 
-			 pos.x = pos.x - 4*(font_size.x);
-			 pos.y = pos.y - (font_size.y);
+		     bitmap_ptr wp_arrow = get_bitmap(BitmapID::wp_arrow);
+		     if (wp_arrow) {
+		        size_type const vect = get_size(wp_arrow) / 2;
+		        draw_bitmap(wp_arrow, pos, vect, heading - wp_bearing);
+		     }
 
-			 sprintf(buf,"%4.0fm/%4.0f%c",dist,(double)bearing360,176);
-			 draw_text(buf,pos,font);
+             pos.x = pos.x + (2*font_size.x);
+
+	         sprintf(buf,"%4.0fm",dist);
+	         draw_text(buf,pos,font);
+
          }
 	   }
 	}

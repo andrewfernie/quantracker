@@ -64,13 +64,13 @@ void draw_mode()
 
 	   if (font){
 
-		  uint8_t const mode = get_base_mode();
+		  uint8_t const armed = get_arm_mode();
 
-		  if ((mode & 0x80)!=0){
+		  if (armed){
 			 sprintf(buf,"%s", "armed");
 		  }
 		  else {
-			 sprintf(buf,"%s", "no-arm");
+			 sprintf(buf,"%s", "no arm");
 		  }
 
 		  draw_text(buf,pos,font);

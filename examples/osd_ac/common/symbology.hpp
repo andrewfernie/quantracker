@@ -75,4 +75,6 @@ uint32_t osd_get_afcl_horizon_eye_distance();
 
 uint8_t osd_get_page_select_channel_number();
 
+uint8_t osd_get_init_home_on_arm();
+
 #endif // QUANTRACKER_AIR_OSD_EXAMPLES_SYMBOLOGY_HPP_INCLUDED

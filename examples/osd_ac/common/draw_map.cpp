@@ -34,6 +34,7 @@ void draw_map()
 
     if (osd_show_map() == true)
     {
+        /*
 
         pxp_type pos = get_osd_map_position();
 
@@ -49,7 +50,6 @@ void draw_map()
         uint16_t x1i, y1i, xlj, ylj;
         uint8_t i;
 
-        /*
 
         map_max_xy = 1.0;	// Initialize low so that we can capture the maximum
 

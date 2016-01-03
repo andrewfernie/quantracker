@@ -81,6 +81,8 @@ namespace
     quan::uav::osd::pal_ntsc_pos osd_nav_wp_position = { -32, 75, 75 };
 
     uint8_t osd_page_select_channel_number = 8;
+
+    uint8_t osd_init_home_on_arm = true;
 }
 
 uint8_t osd_show_altitude_page()
@@ -280,6 +282,13 @@ uint8_t osd_get_page_select_channel_number()
 {
     return osd_page_select_channel_number;
 }
+
+uint8_t osd_get_init_home_on_arm()
+{
+    return osd_init_home_on_arm;
+}
+
+
 uint32_t osd_get_afcl_horizon_eye_distance()
 {
     return osd_afcl_horizon_eye_distance;
@@ -1010,6 +1019,15 @@ bool init_values_from_flash()
         if (quan::stm32::flash::get_flash_value("osd_page_select_channel", v))
         {
             osd_page_select_channel_number = v;
+        }
+    }
+
+    if (symtab.is_symbol_name_defined_in_flash("osd_init_home_on_arm"))
+    {
+        uint8_t v;
+        if (quan::stm32::flash::get_flash_value("osd_init_home_on_arm", v))
+        {
+            osd_init_home_on_arm = v;
         }
     }
 
