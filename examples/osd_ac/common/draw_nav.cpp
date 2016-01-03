@@ -59,7 +59,7 @@ font_ptr font = get_font(FontID::OSD_Charset);
 
              pos.x = pos.x + (2*font_size.x);
 
-	         sprintf(buf,"%4.0fm",dist);
+	         sprintf(buf,"%.0fm",dist);
 	         draw_text(buf,pos,font);
 
          }
