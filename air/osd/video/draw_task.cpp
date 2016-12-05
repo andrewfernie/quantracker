@@ -26,10 +26,24 @@ namespace detail{
    bool swap_osd_buffers(quan::time::ms const & wait_time);
    void create_osd_swap_semaphores();
 
-   
+
+/*
+   Will make this settable at some point
+   For transmitter it is OK to go to internal video on no input
+   but for receiver on tracker
+   it isnt ideal to go to black screen on video signal lost
+   since it may still actually be visible
+   Could prob work on the sync_sep algorithm to better 
+   detect sync with noise
+*/
+// Also dont swap to internal video mode for aerflite as it hasnt been implemented yet
+#if defined (QUAN_OSD_TELEM_RECEIVER) || defined (QUAN_AERFLITE_BOARD)
+   bool swap_to_internal_video_on_signal_lost =  false;
+#else
+   bool swap_to_internal_video_on_signal_lost =  true;
+#endif
 }
 namespace {
-
    void draw_task(void * params)
    {
        vTaskDelay(100); // want to know if have video
@@ -54,10 +68,9 @@ namespace {
          if ( osd_state::get() == osd_state::external_video ){  
 
             constexpr quan::time::ms wait_time{1000};
-            if (!detail::swap_osd_buffers(wait_time)){
-               osd_state::set(osd_state::internal_video);
-            }else{
-               // quan::stm32::complement<heartbeat_led_pin>();
+            // if no video and want to got to internal video mode
+            if (!detail::swap_osd_buffers(wait_time) && detail::swap_to_internal_video_on_signal_lost){
+                  osd_state::set(osd_state::internal_video);
             }
          }
 
@@ -74,7 +87,7 @@ void create_draw_task()
 
    xTaskCreate(
       draw_task,"draw_task", 
-      5000, 
+      3000, 
       &dummy_param,
       task_priority::draw,
       &task_handle

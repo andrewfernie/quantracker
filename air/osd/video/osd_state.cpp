@@ -4,7 +4,9 @@
 #include "../resources.hpp"
 
 namespace detail{
+#if !defined QUAN_AERFLITE_BOARD
     bool dac_busy();
+#endif
     void video_setup();
     //void internal_video_mode_setup();
     void video_take_down();
@@ -54,17 +56,19 @@ void osd_state::suspend()
    }
    #endif
       // clear dma flags
-   DMA1->HIFCR |= ( (0b111101 << 6) | (0b111101 << 0));
-   DMA1->HIFCR &= ~( (0b111101 << 6) | (0b111101 << 0));
+   DMA1->HIFCR = ( (0b111101 << 6) | (0b111101 << 0));
+
 #if defined QUAN_OSD_TELEM_RECEIVER
-   DMA2->LIFCR |= (0b111101 << 6) ; // clear flags for Dma2 Stream 1
-   DMA2->LIFCR &= ~(0b111101 << 6) ; // flags for Dma2 Stream 1
+   DMA2->LIFCR = (0b111101 << 6) ; // clear flags for Dma2 Stream 1
+  // DMA2->LIFCR &= ~(0b111101 << 6) ; // flags for Dma2 Stream 1
 #endif
 
    m_have_external_video = false;
    m_current_state = suspended;
    taskEXIT_CRITICAL();
+#if !defined QUAN_AERFLITE_BOARD
    while( detail::dac_busy() ){;}
+#endif
 
 }
 
@@ -96,6 +100,7 @@ void osd_state::switch_to_internal_video_mode()
     detail::video_setup();
 
 }
+
 void osd_state::switch_to_external_video_mode()
 {
    if ( m_current_state != suspended){

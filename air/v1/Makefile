@@ -13,6 +13,7 @@ CC1     = $(TOOLCHAIN_PREFIX)bin/arm-none-eabi-gcc
 LD      = $(TOOLCHAIN_PREFIX)bin/arm-none-eabi-g++
 CP      = $(TOOLCHAIN_PREFIX)bin/arm-none-eabi-objcopy
 OD      = $(TOOLCHAIN_PREFIX)bin/arm-none-eabi-objdump
+SIZ     = $(TOOLCHAIN_PREFIX)bin/arm-none-eabi-size
   
 INCLUDES = /opt/stm32f0/STM32F0xx_StdPeriph_Lib_V1.1.0/Libraries/CMSIS/Include \
 /opt/stm32f0/STM32F0xx_StdPeriph_Lib_V1.1.0/Libraries/CMSIS/Device/ST/STM32F0xx/Include \
@@ -46,10 +47,10 @@ CFLAG_EXTRAS = -fno-math-errno -Os
 CFLAGS  = -std=c++11 -fno-rtti -fno-exceptions -c -g $(DEFINE_ARGS) $(INCLUDE_ARGS) \
   $(PROCESSOR_FLAGS) $(CFLAG_EXTRAS)
 
-LFLAGS  = -T$(LINKER_SCRIPT)  -nostartfiles -nodefaultlibs $(PROCESSOR_FLAGS) $(INIT_LIBS) \
+LDFLAGS  = -T$(LINKER_SCRIPT)  -nostartfiles -nodefaultlibs $(PROCESSOR_FLAGS) $(INIT_LIBS) \
    --specs=nano.specs $(CFLAG_EXTRAS)
 
-#LFLAGS  =  -v
+#LDFLAGS  =  -v
 CPFLAGS = -Obinary
 #ODFLAGS = -D
 ODFLAGS = -d
@@ -73,10 +74,11 @@ test: main.elf
 	@ echo "...copying"
 	$(CP) $(CPFLAGS) main.elf main.bin
 	$(OD) $(ODFLAGS) main.elf > main.lst
+	$(SIZ) -A main.elf
 
 main.elf: startup.o $(objects) 
 	@ echo "..linking"
-	$(LD) $(LFLAGS) -o main.elf $(objects) startup.o
+	$(LD) $(LDFLAGS) -o main.elf $(objects) startup.o
 
 $(objects): %.o : %.cpp  sin_array.txt fsk_params.hpp
 	$(CC) $(CFLAGS) $< -o $@

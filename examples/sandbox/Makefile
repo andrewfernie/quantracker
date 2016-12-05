@@ -24,9 +24,11 @@
 # for use as a template edit this 
 QUANTRACKER_ROOT_DIR = ../../
 
-TARGET_PROCESSOR = STM32F4
+TARGET_PROCESSOR = STM32F4RGT6
 
 LINKER_SCRIPT = $(QUANTRACKER_ROOT_DIR)air/osd/stm32f4.ld
+
+TELEMETRY_DIRECTION = QUAN_OSD_TELEM_NONE
 
 include $(QUANTRACKER_ROOT_DIR)include/quantracker/build/osd.mk
 
@@ -58,7 +60,7 @@ test: $(BINDIR)main.elf
 
 $(BINDIR)main.elf: $(objects) $(static_libraries) 
 	@ echo "..linking"
-	$(LD) $(LFLAGS) -Wl,-Map=$(BINDIR)output.map -o $(BINDIR)main.elf $(INIT_LIBS) $(objects) \
+	$(LD) $(LDFLAGS) -Wl,-Map=$(BINDIR)output.map -o $(BINDIR)main.elf $(INIT_LIBS) $(objects) \
    -Wl,--undefined=_sbrk $(static_libraries) 
 
 $(obj_board_objects): $(OBJDIR)%.o : %.cpp
